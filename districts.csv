@@ -1,0 +1,15 @@
+district_id,district_name,latitude,longitude,region,area_sq_km,hq_city
+1,Thiruvananthapuram,8.5241,76.9366,Southern,2192,Thiruvananthapuram
+2,Kollam,8.8932,76.6141,Southern,2491,Kollam
+3,Pathanamthitta,9.2648,76.7870,Southern,2642,Pathanamthitta
+4,Alappuzha,9.4981,76.3388,Central,1414,Alappuzha
+5,Kottayam,9.5916,76.5222,Central,2208,Kottayam
+6,Idukki,9.9189,77.1025,Central,4358,Painavu
+7,Ernakulam,9.9816,76.2999,Central,3068,Kakkanad
+8,Thrissur,10.5276,76.2144,Central,3032,Thrissur
+9,Palakkad,10.7867,76.6548,Northern,4480,Palakkad
+10,Malappuram,11.0510,76.0711,Northern,3550,Malappuram
+11,Kozhikode,11.2588,75.7804,Northern,2345,Kozhikode
+12,Wayanad,11.6854,76.1320,Northern,2132,Kalpetta
+13,Kannur,11.8745,75.3704,Northern,2966,Kannur
+14,Kasaragod,12.4996,74.9869,Northern,1992,Kasaragod

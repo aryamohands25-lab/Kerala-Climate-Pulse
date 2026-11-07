@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#071b2b">
+    <title>Kerala Climate Pulse | Climate Intelligence Dashboard</title>
+    <meta name="description" content="Live weather, rainfall and air quality intelligence for all 14 districts of Kerala.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="#">
+            <span class="brand-icon">K</span>
+            <span>KERALA <strong>CLIMATE PULSE</strong></span>
+        </a>
+        <div class="header-right">
+            <span class="live-dot"></span>
+            <span>LIVE DATA</span>
+            <span id="last-updated">Connecting...</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <div>
+                <p class="eyebrow">KERALA STATE CLIMATE INTELLIGENCE</p>
+                <h1>Understand the climate.<br><span>Prepare for tomorrow.</span></h1>
+                <p class="hero-copy">Weather patterns, rainfall trends and air quality across all 14 districts of Kerala.</p>
+            </div>
+            <div class="hero-side">
+                <div class="status-card">
+                    <span class="status-label">SYSTEM STATUS</span>
+                    <strong id="api-status">CONNECTING</strong>
+                    <span>Live API connection</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">STATE OVERVIEW</p>
+                    <h2>Climate at a glance</h2>
+                </div>
+                <span class="muted">Latest available readings</span>
+            </div>
+            <div class="metric-grid">
+                <article class="metric-card">
+                    <span class="metric-icon">TEMP</span>
+                    <p>Temperature</p>
+                    <h3 id="avg-temp">--</h3>
+                    <small>Average across districts</small>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-icon">HUM</span>
+                    <p>Humidity</p>
+                    <h3 id="avg-humidity">--</h3>
+                    <small>Average across districts</small>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-icon">RAIN</span>
+                    <p>Rainfall</p>
+                    <h3 id="avg-rainfall">--</h3>
+                    <small>Average across districts</small>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-icon">AQI</span>
+                    <p>Air Quality Index</p>
+                    <h3 id="avg-aqi">--</h3>
+                    <small>Average across districts</small>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">DISTRICT INTELLIGENCE</p>
+                    <h2>Explore Kerala</h2>
+                </div>
+                <select id="district-select" aria-label="Select district">
+                    <option value="">Select a district</option>
+                </select>
+            </div>
+            <div class="district-layout">
+                <div class="district-list-panel">
+                    <h3>14 districts</h3>
+                    <div id="district-list" class="district-list">
+                        <p class="muted">Loading districts...</p>
+                    </div>
+                </div>
+                <div class="district-detail">
+                    <div class="district-detail-head">
+                        <div>
+                            <p class="eyebrow">SELECTED DISTRICT</p>
+                            <h3 id="selected-district">Kerala</h3>
+                        </div>
+                        <span id="district-region" class="region-tag">State view</span>
+                    </div>
+                    <div class="district-metrics">
+                        <div><span>Temperature</span><strong id="district-temp">--</strong></div>
+                        <div><span>Humidity</span><strong id="district-humidity">--</strong></div>
+                        <div><span>Rainfall</span><strong id="district-rain">--</strong></div>
+                        <div><span>Air quality</span><strong id="district-aqi">--</strong></div>
+                    </div>
+                    <p id="district-observed" class="muted">Choose a district to view its latest readings.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">HISTORICAL ANALYSIS</p>
+                    <h2>Weather trends</h2>
+                </div>
+                <select id="history-days" aria-label="History period">
+                    <option value="7">Last 7 days</option>
+                    <option value="14">Last 14 days</option>
+                    <option value="30">Last 30 days</option>
+                </select>
+            </div>
+            <div class="chart-grid">
+                <article class="chart-card">
+                    <h3>Daily temperature</h3>
+                    <p class="muted">Average temperature in Celsius</p>
+                    <div class="chart-wrap"><canvas id="temperature-chart"></canvas></div>
+                </article>
+                <article class="chart-card">
+                    <h3>Daily rainfall</h3>
+                    <p class="muted">Total rainfall in millimetres</p>
+                    <div class="chart-wrap"><canvas id="rainfall-chart"></canvas></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">ENVIRONMENTAL MONITORING</p>
+                    <h2>Air quality & alerts</h2>
+                </div>
+            </div>
+            <div class="content-grid">
+                <article class="panel">
+                    <h3>Air quality alerts</h3>
+                    <div id="air-alerts" class="alert-list"><p class="muted">Loading alerts...</p></div>
+                </article>
+                <article class="panel">
+                    <h3>Heavy rainfall alerts</h3>
+                    <div id="rain-alerts" class="alert-list"><p class="muted">Loading alerts...</p></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">DISTRICT COMPARISON</p>
+                    <h2>Climate rankings</h2>
+                </div>
+            </div>
+            <div class="content-grid">
+                <article class="panel">
+                    <h3>Highest AQI districts</h3>
+                    <div id="aqi-rankings" class="ranking-list"><p class="muted">Loading rankings...</p></div>
+                </article>
+                <article class="panel">
+                    <h3>Rainfall rankings</h3>
+                    <div id="rain-rankings" class="ranking-list"><p class="muted">Loading rankings...</p></div>
+                </article>
+            </div>
+        </section>
+
+        <footer>
+            <div class="brand footer-brand"><span class="brand-icon">K</span><span>KERALA <strong>CLIMATE PULSE</strong></span></div>
+            <p>Climate intelligence for a resilient Kerala.</p>
+            <p>Data powered by Open-Meteo | Built with FastAPI and PostgreSQL</p>
+        </footer>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+

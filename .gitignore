@@ -76,3 +76,6 @@ node_modules/
 ongit*
 
 .streamlit/secrets.toml
+
+# Local backup files
+local-backups/

@@ -9,6 +9,7 @@ from datetime import date, timedelta
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.engine import Connection, Engine
 
@@ -40,6 +41,14 @@ def create_app(engine: Engine | None = None, *, init_db: bool = True) -> FastAPI
         version="1.0.0",
         description="Hourly weather and air quality for Kerala's 14 districts (Open-Meteo data).",
         lifespan=lifespan,
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["GET"],
+        allow_headers=["*"],
     )
     app.state.engine = engine or get_engine()
 

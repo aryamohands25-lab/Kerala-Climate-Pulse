@@ -1,0 +1,44 @@
+name: Scheduled ingestion
+
+# Runs the full pipeline every 6 hours against a throw-away Postgres service,
+# then publishes the quality report and the gold CSVs (for Power BI) as artifacts.
+# To keep data permanently, point POSTGRES_* at a hosted Postgres via repo secrets.
+
+on:
+  schedule:
+    - cron: "30 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: kerala_climate
+          POSTGRES_USER: kerala_user
+          POSTGRES_PASSWORD: changeme
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U kerala_user"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      POSTGRES_HOST: localhost
+      BACKFILL_DAYS: "7"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run pipeline
+        run: python -m ingestion.run_pipeline --with-anomaly --export
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: climate-pulse-${{ github.run_id }}
+          path: |
+            reports/
+            data/gold/

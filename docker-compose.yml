@@ -1,0 +1,66 @@
+# Kerala Climate Pulse - Postgres + API + ingestion job
+#   docker compose up --build          # db + api + one ingestion run
+#   docker compose run --rm ingestion  # re-run the pipeline on demand
+#   docker compose --profile scheduler up -d scheduler   # hourly runs
+# Settings come from .env (copy .env.example first); defaults work out of the box.
+
+x-app-env: &app-env
+  POSTGRES_HOST: db
+  POSTGRES_PORT: 5432
+  POSTGRES_DB: ${POSTGRES_DB:-kerala_climate}
+  POSTGRES_USER: ${POSTGRES_USER:-kerala_user}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+  BACKFILL_DAYS: ${BACKFILL_DAYS:-7}
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-kerala_climate}
+      POSTGRES_USER: ${POSTGRES_USER:-kerala_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"        # lets Power BI Desktop connect to localhost:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  ingestion:
+    build: .
+    command: python -m ingestion.run_pipeline --with-anomaly --export
+    environment: *app-env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+    restart: "no"
+
+  api:
+    build: .
+    environment: *app-env
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  scheduler:
+    build: .
+    command: python -m ingestion.scheduler
+    environment: *app-env
+    profiles: ["scheduler"]
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+
+volumes:
+  pgdata:

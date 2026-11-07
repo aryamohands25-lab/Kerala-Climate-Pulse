@@ -1,0 +1,76 @@
+# ── Python ─────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
+
+# ── Virtualenv / Conda ──────────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ── Environment secrets ─────────────────────────────────────────────────────────
+.env
+!.env.example
+
+# ── Data layers (raw data should not be committed) ─────────────────────────────
+data/bronze/*
+data/silver/*
+data/gold/*
+*.parquet
+*.csv.gz
+
+# Keep directory placeholders
+!data/bronze/.gitkeep
+!data/silver/.gitkeep
+!data/gold/.gitkeep
+
+# ── IDE & OS ───────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs & reports ─────────────────────────────────────────────────────────────
+*.log
+logs/
+reports/*
+!reports/.gitkeep
+
+# ── Docker ─────────────────────────────────────────────────────────────────────
+*.env.prod
+
+# ── Pytest / Coverage ──────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ── Jupyter ─────────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Alembic ────────────────────────────────────────────────────────────────────
+alembic/versions/
+
+.env.backup
+.neon
+node_modules/
+# Unused Neon CLI / Node setup
+neon.ts
+package.json
+package-lock.json
+node_modules/
+
+# Old root-level Gold exports
+/gold/
+
+# Accidental terminal command file
+ongit*

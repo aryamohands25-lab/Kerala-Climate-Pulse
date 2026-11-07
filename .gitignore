@@ -74,3 +74,5 @@ node_modules/
 
 # Accidental terminal command file
 ongit*
+
+.streamlit/secrets.toml
